@@ -1,4 +1,4 @@
-.PHONY: help app app-down app-build app-restart app-logs app-shell clean build-size install run run-bot
+.PHONY: help app app-down app-build app-restart app-logs app-shell clean build-size install run run-bot lint format check
 
 help:
 	@echo Available commands:
@@ -13,6 +13,9 @@ help:
 	@echo   install           Install dependencies locally
 	@echo   run               Run locally without Docker
 	@echo   run-bot           Run bot locally without Docker
+	@echo   lint              Run code linting with ruff
+	@echo   format            Format code with black
+	@echo   check             Run all code quality checks
 
 app:
 	docker compose -f docker-compose.yml up -d
@@ -41,6 +44,19 @@ run:
 run-bot:
 	uv run python -m src.bot.main
 
+lint:
+	uv run ruff check
+
+format:
+	uv run black .
+
+check:
+	@echo "🔍 Running code quality checks..."
+	@echo "1. Running Ruff linter..."
+	uv run ruff check
+	@echo "2. Checking Black formatting..."
+	uv run black . --check
+	@echo "✅ All checks passed!"
 
 clean:
 	docker compose -f docker-compose.yml down --volumes --remove-orphans
