@@ -1,6 +1,5 @@
 import logging
 from datetime import datetime
-from typing import List, Optional
 
 from aiogram import Bot, Dispatcher
 from aiogram.types import BufferedInputFile
@@ -15,11 +14,9 @@ class TelegramService:
     def __init__(self, bot: Bot, dp: Dispatcher) -> None:
         self.bot: Bot = bot
         self.dp: Dispatcher = dp
-        self.chat_ids: List[int] = config.message_chat_ids
+        self.chat_ids: list[int] = config.message_chat_ids
 
-    async def send_detection_alert(
-        self, image_buffer: bytes, confidence: float
-    ) -> None:
+    async def send_detection_alert(self, image_buffer: bytes, confidence: float) -> None:
         try:
             current_time: datetime = datetime.now()
             caption: str = PERSON_DETECTED_ALTERT_TEMPLATE.format(
@@ -33,13 +30,9 @@ class TelegramService:
 
             for chat_id in self.chat_ids:
                 try:
-                    photo: BufferedInputFile = BufferedInputFile(
-                        image_buffer, filename=filename
-                    )
+                    photo: BufferedInputFile = BufferedInputFile(image_buffer, filename=filename)
 
-                    await self.bot.send_photo(
-                        chat_id=chat_id, photo=photo, caption=caption
-                    )
+                    await self.bot.send_photo(chat_id=chat_id, photo=photo, caption=caption)
 
                     logger.info(
                         {
@@ -76,7 +69,7 @@ class TelegramService:
             )
 
 
-telegram_service: Optional[TelegramService] = None
+telegram_service: TelegramService | None = None
 
 
 def init_telegram_service(bot: Bot, dp: Dispatcher) -> None:

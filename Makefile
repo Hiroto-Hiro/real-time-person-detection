@@ -51,12 +51,12 @@ format:
 	uv run black .
 
 check:
-	@echo "🔍 Running code quality checks..."
+	@echo "Running code quality checks..."
 	@echo "1. Running Ruff linter..."
 	uv run ruff check
 	@echo "2. Checking Black formatting..."
 	uv run black . --check
-	@echo "✅ All checks passed!"
+	@echo "All checks passed!"
 
 clean:
 	docker compose -f docker-compose.yml down --volumes --remove-orphans

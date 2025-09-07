@@ -1,10 +1,11 @@
 import asyncio
 import logging
-from aiogram.types import Message
-from aiogram.filters import Command
 
-from src.config import config
+from aiogram.filters import Command
+from aiogram.types import Message
+
 from src.bot.config import bot, dp
+from src.config import config
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

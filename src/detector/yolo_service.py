@@ -1,10 +1,11 @@
 import logging
-from typing import List, Dict, Optional, Any
+from typing import Any
+
 import ultralytics
 from cv2.typing import MatLike
 
-from .interfaces import DetectorProtocol, Detection, DetectionResult
 from .enums import YOLOModelNames
+from .interfaces import Detection, DetectionResult, DetectorProtocol
 
 logger = logging.getLogger(__name__)
 
@@ -12,7 +13,7 @@ logger = logging.getLogger(__name__)
 class YOLODetectorService(DetectorProtocol):
     def __init__(self, model_path: str) -> None:
         self.model_path: str = model_path
-        self._model: Optional[ultralytics.YOLO] = None
+        self._model: ultralytics.YOLO | None = None
         self._is_initialized: bool = False
 
     def initialize(self) -> bool:
@@ -53,20 +54,20 @@ class YOLODetectorService(DetectorProtocol):
             )
             return False
 
-    def detect(self, frame: MatLike) -> List[Any]:
+    def detect(self, frame: MatLike) -> list[Any]:
         if not self._is_initialized or self._model is None:
             raise RuntimeError("YOLO model not initialized")
 
         return self._model(frame)
 
-    def get_model_names(self) -> Dict[int, str]:
+    def get_model_names(self) -> dict[int, str]:
         if not self._is_initialized or self._model is None:
             raise RuntimeError("YOLO model not initialized")
 
         return self._model.names
 
-    def process_results(self, results: List[Any]) -> DetectionResult:
-        detections: List[Detection] = []
+    def process_results(self, results: list[Any]) -> DetectionResult:
+        detections: list[Detection] = []
         max_confidence: float = 0.0
 
         for result in results:
@@ -80,9 +81,7 @@ class YOLODetectorService(DetectorProtocol):
                     x1, y1, x2, y2 = box.xyxy[0].cpu().numpy()
                     bbox = (int(x1), int(y1), int(x2), int(y2))
 
-                    detection = Detection(
-                        class_name=class_name, confidence=confidence, bbox=bbox
-                    )
+                    detection = Detection(class_name=class_name, confidence=confidence, bbox=bbox)
                     detections.append(detection)
 
                     if class_name == YOLOModelNames.PERSON:

@@ -1,26 +1,25 @@
 import logging
-from typing import Tuple, List, Dict, Any
+from typing import Any
+
 import cv2
 from cv2.typing import MatLike
 
-from .interfaces import ImageProcessorProtocol, Detection
 from .enums import YOLOModelNames
+from .interfaces import Detection, ImageProcessorProtocol
 
 logger = logging.getLogger(__name__)
 
 
 class ImageProcessor(ImageProcessorProtocol):
     def __init__(self) -> None:
-        self.person_color: Tuple[int, int, int] = (0, 0, 255)
+        self.person_color: tuple[int, int, int] = (0, 0, 255)
         self.line_thickness: int = 2
         self.font: int = cv2.FONT_HERSHEY_SIMPLEX
         self.font_scale: float = 0.5
-        self.text_color: Tuple[int, int, int] = (0, 0, 255)
+        self.text_color: tuple[int, int, int] = (0, 0, 255)
         self.text_thickness: int = 2
 
-    def draw_detections(
-        self, frame: MatLike, results: List[Any], model_names: Dict[int, str]
-    ) -> MatLike:
+    def draw_detections(self, frame: MatLike, results: list[Any], model_names: dict[int, str]) -> MatLike:
         annotated_frame: MatLike = frame.copy()
         for result in results:
             boxes = result.boxes
@@ -67,9 +66,7 @@ class ImageProcessor(ImageProcessorProtocol):
 
         return annotated_frame
 
-    def draw_detections_from_objects(
-        self, frame: MatLike, detections: List[Detection]
-    ) -> MatLike:
+    def draw_detections_from_objects(self, frame: MatLike, detections: list[Detection]) -> MatLike:
         annotated_frame: MatLike = frame.copy()
         for detection in detections:
             if detection.class_name == YOLOModelNames.PERSON:
@@ -96,7 +93,7 @@ class ImageProcessor(ImageProcessorProtocol):
 
         return annotated_frame
 
-    def encode_to_buffer(self, frame: MatLike) -> Tuple[bool, bytes]:
+    def encode_to_buffer(self, frame: MatLike) -> tuple[bool, bytes]:
         success: bool
         buffer: Any
         success, buffer = cv2.imencode(".jpg", frame)

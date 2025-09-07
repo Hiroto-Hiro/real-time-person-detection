@@ -1,5 +1,5 @@
 import logging
-from typing import Optional, Tuple, List
+
 import cv2
 from cv2.typing import MatLike
 
@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 class CameraService(CameraProtocol):
     def __init__(self, camera_url: str) -> None:
         self.camera_url: str = camera_url
-        self._camera: Optional[cv2.VideoCapture] = None
+        self._camera: cv2.VideoCapture | None = None
         self._is_initialized: bool = False
 
     def initialize(self) -> bool:
@@ -48,18 +48,14 @@ class CameraService(CameraProtocol):
 
         return self._is_initialized
 
-    def read_frame(self) -> Tuple[bool, Optional[MatLike]]:
+    def read_frame(self) -> tuple[bool, MatLike | None]:
         if not self.is_available():
             return False, None
 
         return self._camera.read()
 
     def is_available(self) -> bool:
-        return (
-            self._is_initialized
-            and self._camera is not None
-            and self._camera.isOpened()
-        )
+        return self._is_initialized and self._camera is not None and self._camera.isOpened()
 
     def release(self) -> None:
         if self._camera is not None:
@@ -75,13 +71,13 @@ class CameraService(CameraProtocol):
             }
         )
 
-    def _setup_camera(self) -> Optional[cv2.VideoCapture]:
+    def _setup_camera(self) -> cv2.VideoCapture | None:
         if self.camera_url.startswith("http"):
             return self._setup_network_camera()
         else:
             return self._setup_local_camera()
 
-    def _setup_network_camera(self) -> Optional[cv2.VideoCapture]:
+    def _setup_network_camera(self) -> cv2.VideoCapture | None:
         base_url = self.camera_url.split("/view/")[0]
         mjpeg_urls = [
             f"{base_url}/mjpg/1/video.mjpg",
@@ -93,7 +89,7 @@ class CameraService(CameraProtocol):
 
         return self._try_camera_urls(mjpeg_urls)
 
-    def _setup_local_camera(self) -> Optional[cv2.VideoCapture]:
+    def _setup_local_camera(self) -> cv2.VideoCapture | None:
         try:
             camera_id = int(self.camera_url)
             camera = cv2.VideoCapture(camera_id)
@@ -105,7 +101,7 @@ class CameraService(CameraProtocol):
 
         return None
 
-    def _try_camera_urls(self, urls: List[str]) -> Optional[cv2.VideoCapture]:
+    def _try_camera_urls(self, urls: list[str]) -> cv2.VideoCapture | None:
         for mjpeg_url in urls:
             logger.debug(
                 {
