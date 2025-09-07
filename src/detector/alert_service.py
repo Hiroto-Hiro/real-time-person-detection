@@ -1,8 +1,8 @@
 import logging
 from datetime import datetime
 
-from .interfaces import AlertProtocol
 from ..bot.service import TelegramService
+from .interfaces import AlertProtocol
 
 logger = logging.getLogger(__name__)
 
@@ -26,9 +26,7 @@ class AlertService(AlertProtocol):
         )
 
         try:
-            await self.telegram_service.send_detection_alert(
-                image_buffer=image_buffer, confidence=confidence
-            )
+            await self.telegram_service.send_detection_alert(image_buffer=image_buffer, confidence=confidence)
 
             logger.info(
                 {

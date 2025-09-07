@@ -1,13 +1,13 @@
 import asyncio
 import logging
 
-from src.config import config
 from src.bot.config import bot, dp
 from src.bot.service import (
     get_telegram_service,
     init_telegram_service,
     is_telegram_service_available,
 )
+from src.config import config
 from src.detector import CamAnalyzer, DIContainer
 
 logging.basicConfig(level=logging.INFO)

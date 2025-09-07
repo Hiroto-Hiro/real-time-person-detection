@@ -1,20 +1,21 @@
 import logging
 import time
-from typing import Optional, Any, List
+from typing import Any
+
 from cv2.typing import MatLike
 
+from ..bot.service import TelegramService
+from .alert_service import AlertService
+from .camera_service import CameraService
+from .image_processor import ImageProcessor
 from .interfaces import (
+    AlertProtocol,
     CameraProtocol,
     DetectionResult,
     DetectorProtocol,
-    AlertProtocol,
     ImageProcessorProtocol,
 )
-from .camera_service import CameraService
 from .yolo_service import YOLODetectorService
-from .image_processor import ImageProcessor
-from .alert_service import AlertService
-from ..bot.service import TelegramService
 
 logger = logging.getLogger(__name__)
 
@@ -34,10 +35,10 @@ class DIContainer:
         self.check_interval: int = check_interval
         self.telegram_service: TelegramService = telegram_service
 
-        self._camera_service: Optional[CameraProtocol] = None
-        self._detector_service: Optional[DetectorProtocol] = None
-        self._image_processor: Optional[ImageProcessorProtocol] = None
-        self._alert_service: Optional[AlertProtocol] = None
+        self._camera_service: CameraProtocol | None = None
+        self._detector_service: DetectorProtocol | None = None
+        self._image_processor: ImageProcessorProtocol | None = None
+        self._alert_service: AlertProtocol | None = None
 
     def get_camera_service(self) -> CameraProtocol:
         if self._camera_service is None:
@@ -176,14 +177,9 @@ class CamAnalyzer:
                 break
 
     def _should_send_alert(self, detection_result: DetectionResult) -> bool:
-        return (
-            detection_result.has_person
-            and detection_result.max_confidence >= self.confidence_threshold
-        )
+        return detection_result.has_person and detection_result.max_confidence >= self.confidence_threshold
 
-    async def _handle_detection(
-        self, frame: MatLike, raw_results: List[Any], detection_result: DetectionResult
-    ) -> None:
+    async def _handle_detection(self, frame: MatLike, raw_results: list[Any], detection_result: DetectionResult) -> None:
         logger.info(
             {
                 "action": "handle_detection",
@@ -195,9 +191,7 @@ class CamAnalyzer:
             }
         )
 
-        annotated_frame = self.image_processor.draw_detections(
-            frame, raw_results, self.detector_service.get_model_names()
-        )
+        annotated_frame = self.image_processor.draw_detections(frame, raw_results, self.detector_service.get_model_names())
 
         success, image_buffer = self.image_processor.encode_to_buffer(annotated_frame)
         if not success:
@@ -210,9 +204,7 @@ class CamAnalyzer:
             )
             return
 
-        await self.alert_service.send_alert(
-            image_buffer=image_buffer, confidence=detection_result.max_confidence
-        )
+        await self.alert_service.send_alert(image_buffer=image_buffer, confidence=detection_result.max_confidence)
 
         logger.info(
             {

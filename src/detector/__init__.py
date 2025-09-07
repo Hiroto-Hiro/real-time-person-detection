@@ -1,16 +1,16 @@
+from .alert_service import AlertService
 from .cam_analyzer import CamAnalyzer, DIContainer
+from .camera_service import CameraService
+from .image_processor import ImageProcessor
 from .interfaces import (
-    CameraProtocol,
-    DetectorProtocol,
     AlertProtocol,
-    ImageProcessorProtocol,
+    CameraProtocol,
     Detection,
     DetectionResult,
+    DetectorProtocol,
+    ImageProcessorProtocol,
 )
-from .camera_service import CameraService
 from .yolo_service import YOLODetectorService
-from .image_processor import ImageProcessor
-from .alert_service import AlertService
 
 __all__ = [
     "CamAnalyzer",
