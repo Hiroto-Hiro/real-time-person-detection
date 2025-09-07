@@ -1,0 +1,16 @@
+[project]
+name = "cam-analyser"
+version = "1.0.0"
+description = "Интеллектуальная система анализа видеопотока с детекцией людей и уведомлениями в Telegram"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "aio-pika>=9.5.7",
+    "aiogram>=3.22.0",
+    "black>=25.1.0",
+    "httpx>=0.28.1",
+    "opencv-python>=4.12.0.88",
+    "pydantic-settings>=2.10.1",
+    "ruff>=0.12.11",
+    "ultralytics>=8.3.189",
+]

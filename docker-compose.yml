@@ -1,0 +1,36 @@
+services:
+  telegram-bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cam-analyser-bot
+    command: uv run python -m src.bot.main
+    environment:
+      - MODEL=${MODEL}
+      - CAMERA_URL=${CAMERA_URL}
+      - CONFIDENCE_THRESHOLD=${CONFIDENCE_THRESHOLD}
+      - CHECK_INTERVAL=${CHECK_INTERVAL}
+      - BOT_TOKEN=${BOT_TOKEN}
+      - MESSAGE_CHAT_IDS=${MESSAGE_CHAT_IDS}
+    restart: unless-stopped
+    depends_on:
+      - cam-analyser
+
+  cam-analyser:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cam-analyser-detector
+    command: uv run python -m src.main
+    environment:
+      - MODEL=${MODEL}
+      - CAMERA_URL=${CAMERA_URL}
+      - CONFIDENCE_THRESHOLD=${CONFIDENCE_THRESHOLD}
+      - CHECK_INTERVAL=${CHECK_INTERVAL}
+      - BOT_TOKEN=${BOT_TOKEN}
+      - MESSAGE_CHAT_IDS=${MESSAGE_CHAT_IDS}
+    restart: unless-stopped
+
+networks:
+  default:
+    name: cam-analyser-network
